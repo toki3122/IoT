@@ -1,39 +1,29 @@
 #include <QTRSensors.h>
 
-// Constants
-const int baseSpeed = 100;  // Base speed for N20 motors
-const int maxSpeed = 255;   // Maximum PWM value
-const int integralLimit = 1000; // Limit for PID integral term
+const int baseSpeed = 100;  
+const int maxSpeed = 255; 
+const int integralLimit = 1000; 
 
-// Motor control pins (L298D)
-#define left_motor_speed     10  // ENA
-#define right_motor_speed    5   // ENB
-#define right_motor_forward  8   // IN1
-#define right_motor_backward 9   // IN2
-#define left_motor_forward   6   // IN3
-#define left_motor_backward  7   // IN4
-
-// Button and LED pins
+#define left_motor_speed 10 
+#define right_motor_speed 5   
+#define right_motor_forward 8  
+#define right_motor_backward 9  
+#define left_motor_forward 6 
+#define left_motor_backward 7  
 #define button_calibration 2
 #define led_green 12
 #define led_red 13
 
-// PID constants (tuned for better line following)
-// - Kp: Increase (e.g., 0.3) if robot doesn't turn enough; decrease (e.g., 0.1) if it oscillates.
-// - Ki: Increase (e.g., 0.002) if robot drifts slightly off-center; keep low to avoid overshoot.
-// - Kd: Increase (e.g., 0.5) if robot oscillates; decrease (e.g., 0.2) if sluggish.
-float Kp = 0.1;    // Stronger correction for deviations
-float Ki = 0;  // Slight integral for steady-state errors
-float Kd = 0.5;    // Reduced to allow faster response
+float Kp = 0.1;
+float Ki = 0; 
+float Kd = 0.5;
 int lastError = 0;
 int I = 0;
 
-// QTR sensor setup
 QTRSensors qtr;
 const uint8_t SensorCount = 6;
 uint16_t sensorValues[SensorCount];
 
-// Button state and debounce
 bool calibrated = false;
 bool running = false;
 unsigned long lastCalibPress = 0;
@@ -118,9 +108,7 @@ void loop() {
 
   // Main control
   if (running && calibrated) {
-    // Read sensors and get line position
     uint16_t positionLine = qtr.readLineWhite(sensorValues);
-    // Debug sensor values
     Serial.print("Sensors: ");
     for (int i = 0; i < SensorCount; i++) {
       Serial.print(sensorValues[i]);
@@ -130,7 +118,7 @@ void loop() {
     Serial.print("Line position: ");
     Serial.println(positionLine);
 
-    // Line detection: check if any sensor is on the line
+    // Line detection
     bool lineDetected = false;
     for (int i = 0; i < SensorCount; i++) {
       int threshold = (qtr.calibrationOn.minimum[i] + qtr.calibrationOn.maximum[i]) / 2;
@@ -176,8 +164,8 @@ bool is_junction() {
 }
 
 void PID_control(uint16_t positionLine) {
-  int error = positionLine - 2500; // Corrected error calculation
-  if (abs(error) < 50) I = 0; // Reset integral near center
+  int error = positionLine - 2500;
+  if (abs(error) < 50) I = 0; 
   int P = error;
   I += error;
   I = constrain(I, -integralLimit, integralLimit);
@@ -187,12 +175,10 @@ void PID_control(uint16_t positionLine) {
   int adj = P * Kp + I * Ki + D * Kd;
   int motorSpeedA = baseSpeed + adj;
   int motorSpeedB = baseSpeed - adj;
-
   motorSpeedA = constrain(motorSpeedA, -maxSpeed, maxSpeed);
   motorSpeedB = constrain(motorSpeedB, -maxSpeed, maxSpeed);
   motor(motorSpeedA, motorSpeedB);
 
-  // Debug PID output
   Serial.print("Error: ");
   Serial.print(error);
   Serial.print(", Adj: ");
@@ -215,13 +201,11 @@ void handle_t_junction() {
     Serial.println("Turning left");
     motor(-100, 100);
     while (abs(qtr.readLineWhite(sensorValues) - 2500) > 500) {
-      // Continue reading sensors
     }
   } else if (right > left && right > center) {
     Serial.println("Turning right");
     motor(100, -100);
     while (abs(qtr.readLineWhite(sensorValues) - 2500) > 500) {
-      // Continue reading sensors
     }
   } else {
     Serial.println("Going straight");
@@ -229,7 +213,6 @@ void handle_t_junction() {
     delay(250);
   }
 }
-
 void motor(int a, int b) {
   if (a >= 0) {
     digitalWrite(left_motor_forward, HIGH);
