@@ -1,6 +1,6 @@
 //motion activation
 int pirsensor=0;
-
+//calibration system can be added
 void setup()
 {
   pinMode(3,INPUT);
