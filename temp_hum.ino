@@ -1,17 +1,13 @@
 #include <SimpleDHT.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
-
 int pinDHT11 = 2;
 SimpleDHT11 dht11(pinDHT11);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-
 void setup() {
   Serial.begin(9600);
 }
-
 void loop() {
-
   Serial.println("=================================");
   Serial.println("Sample DHT11...");
 
@@ -23,8 +19,6 @@ void loop() {
     delay(1000);
     return;
   }
-  
-
   lcd.begin(16,2);
   lcd.backlight();
   lcd.print("tempature  "); lcd.print((int)temperature);
@@ -33,3 +27,4 @@ void loop() {
   lcd.print((int)humidity);
   delay(1000);
 }
+
