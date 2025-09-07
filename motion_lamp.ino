@@ -1,30 +1,31 @@
 //motion activation
-int threshold=0;
-for(int i=0;i<1000;i++){
-	sum+=analogRead(A0);
-	delay(10);
-}
-threshold=sum/1000;
+uint32_t threshold=0;
+unsigned long sum=0;
 void setup()
 {
-  pinMode(A0,INPUT);
-  pinMode(13,OUTPUT);
-  Serial.begin(57600);
-  Serial.println("Sensor readings:");
+  	pinMode(A0,INPUT);
+  	pinMode(13,OUTPUT);
+ 	Serial.begin(57600);
+  	Serial.println("Sensor readings:");
+	for(int i=0;i<1000;i++){
+		sum+=analogRead(A0);
+		delay(10);
+	}
+	threshold=sum/1000;
+	Serial.print("Calibration done. Threshold = ");
+  	Serial.println(threshold);
 }
 
 void loop()
 {
-  if (analogRead(A0)>=threshold)
-  {
+  if (analogRead(A0)>=threshold){
     Serial.println("Motion detected! Turning on the light.");
-    Serial.println(pirsensor);
+    Serial.println(analogRead(A0));
     digitalWrite(13, HIGH);
     delay(5000);
     digitalWrite(13, LOW);
   }
-  else
-  {
+  else{
     digitalWrite(13,LOW);
   }
 
