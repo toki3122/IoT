@@ -1,9 +1,13 @@
 //motion activation
-int pirsensor=0;
-//calibration system can be added
+int threshold=0;
+for(int i=0;i<1000;i++){
+	sum+=analogRead(A0);
+	delay(10);
+}
+threshold=sum/1000;
 void setup()
 {
-  pinMode(3,INPUT);
+  pinMode(A0,INPUT);
   pinMode(13,OUTPUT);
   Serial.begin(57600);
   Serial.println("Sensor readings:");
@@ -11,9 +15,7 @@ void setup()
 
 void loop()
 {
-  int pirsensor=analogRead(3);
-
-  if (pirsensor>=512)
+  if (analogRead(A0)>=threshold)
   {
     Serial.println("Motion detected! Turning on the light.");
     Serial.println(pirsensor);
