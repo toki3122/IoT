@@ -3,7 +3,6 @@
 
 U8G2_SH1106_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0);
 
-// --- Keypad setup ---
 const byte ROWS = 4;
 const byte COLS = 4;
 char keys[ROWS][COLS] = {
@@ -16,7 +15,6 @@ byte rowPins[ROWS] = {2,3,4,5};
 byte colPins[COLS] = {6,7,8,9};
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
-// --- Snake setup ---
 const byte cell = 4;
 const byte gridW = 128 / cell;
 const byte gridH = 64 / cell;
@@ -30,7 +28,6 @@ byte foodX, foodY;
 unsigned int score = 0;
 unsigned int highScore = 0;
 
-// --- Functions ---
 void spawnFood() {
   foodX = random(0, gridW);
   foodY = random(0, gridH);
@@ -57,11 +54,8 @@ void drawGameOver() {
   for (int t = 0; t < len + 128; t+=4) {
     u8g2.firstPage();
     do {
-      // Marquee Game Over
       u8g2.setFont(u8g2_font_logisoso16_tr);
       u8g2.drawStr(pos - t, 30, msg.c_str());
-
-      // Scoreboard
       u8g2.setFont(u8g2_font_6x12_tr);
       char buf[20];
       sprintf(buf, "Score:%u", score);
@@ -73,7 +67,6 @@ void drawGameOver() {
     delay(150);
   }
 
-  // Wait for restart key
   char k = 0;
   while (!k) k = keypad.getKey();
   resetGame();
@@ -91,19 +84,15 @@ void readKeypad() {
     case 'A': resetGame(); break;                        // restart
   }
 }
-
-// --- Arduino setup ---
 void setup() {
   u8g2.begin();
   randomSeed(analogRead(0));
   resetGame();
 }
 
-// --- Main loop ---
 void loop() {
   readKeypad();
 
-  // Move snake body
   for (int i = length - 1; i > 0; i--) {
     snakeX[i] = snakeX[i - 1];
     snakeY[i] = snakeY[i - 1];
