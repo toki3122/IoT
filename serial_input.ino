@@ -17,7 +17,9 @@ void setup()
   Serial.println(c,BIN);
   Serial.println(c,HEX);
   for(int i=1;i<=c;i++){
-    digitalWrite(13,!digitalRead(13));
+    digitalWrite(13,1);
+    delay(1000);
+    digitalWrite(13,0);
     delay(1000);
   }
 }
