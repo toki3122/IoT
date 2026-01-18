@@ -1,0 +1,12 @@
+#include "BluetoothSerial.h"
+BluetoothSerial SerialBT;
+void setup(){
+  pinMode(2, OUTPUT);
+  SerialBT.begin("ESP32_LED");
+}
+void loop() {
+    if (SerialBT.read()=='1')
+    digitalWrite(2, HIGH);
+    if (SerialBT.read()=='0')
+    digitalWrite(2, LOW);
+}
