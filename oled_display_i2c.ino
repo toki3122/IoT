@@ -2,8 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SH110X.h>
-
-#define i2c_Address 0x3C        // Usually 0x3C (or try 0x3D if blank)
+#define i2c_Address 0x3C 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1
@@ -26,40 +25,30 @@ void setup() {
 }
 
 void loop() {
-  static float voltage = 10.0;    // simulated sensor reading
-  voltage += random(-5, 6) * 0.01; // vary voltage a little for animation
-
-  // --- Clear previous frame ---
+  static float voltage = 10.0;
+  voltage += random(-5, 6) * 0.01;
   display.clearDisplay();
 
-  // --- Title / Name ---
   display.setTextSize(1);
   display.setTextColor(SH110X_WHITE);
   display.setCursor(0, 0);
   display.println("Ahnaf Hossain");
 
-  // --- University name ---
   display.setTextSize(1);
   display.setCursor(0, 15);
   display.println("EEE, AUST");
 
-  // --- Draw line separator ---
   display.drawLine(0, 28, 127, 28, SH110X_WHITE);
 
-  // --- Show voltage (example sensor data) ---
   display.setTextSize(2);
   display.setCursor(0, 40);
   display.print("V = ");
   display.print(voltage, 2);
   display.println("V");
 
-  // --- Optional circle animation ---
   static int x = 0;
   display.fillCircle(110 + sin(x * 0.1) * 10, 20, 3, SH110X_WHITE);
   x++;
-
-  // --- Display everything ---
   display.display();
-
   delay(1000);
 }
