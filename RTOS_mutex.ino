@@ -8,8 +8,6 @@ volatile int a;
 volatile bool mymutex=false;
 void setup() {
   Serial.begin(9600);
-  pinMode(13,OUTPUT);
-  pinMode(8,INPUT);
   xTaskCreate(task_print,"Task2",100,NULL,1,&TaskHandle2);
   xTaskCreate(task_print1,"Task3",100,NULL,1,&TaskHandle3);
 }
