@@ -13,7 +13,7 @@ void setup() {
     sum/=16;
   }
   for(int i=0;i<4;i++){
-    ccd[i]= luptable[d[3-i]-1];
+    ccd[i]= luptable[d[3-i]];
     PORTB=ccd[i];
     digitalWrite(6,bitRead(ccd[i],6));
     digitalWrite(7,bitRead(ccd[i],7));
