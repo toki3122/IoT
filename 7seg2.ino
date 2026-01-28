@@ -7,7 +7,7 @@ void setup() {
   pinMode(6,OUTPUT);
   pinMode(7,OUTPUT);
   pinMode(A0,OUTPUT);
-  digitalWrite(A0,1);
+  pinMode(A1,OUTPUT);
   for(int i=0;i<2;i++){
     d[i]=sum%16;
     sum/=16;
@@ -16,13 +16,17 @@ void setup() {
 
 void loop() {
     ccd[0]= luptable[d[0]];
-    PORTB=~ccd[0];
-    digitalWrite(6,!bitRead(ccd[0],6));
-    digitalWrite(7,!bitRead(ccd[0],7));
+    PORTB=ccd[0];
+    digitalWrite(6,bitRead(ccd[0],6));
+    digitalWrite(7,bitRead(ccd[0],7));
+  digitalWrite(A0,0);
+  digitalWrite(A1,1);
     delay(10);
     ccd[1]= luptable[d[1]];
-    PORTB=~ccd[1];
-    digitalWrite(6,!bitRead(ccd[1],6));
-    digitalWrite(7,!bitRead(ccd[1],7));
+    PORTB=ccd[1];
+    digitalWrite(6,bitRead(ccd[1],6));
+    digitalWrite(7,bitRead(ccd[1],7));
+  digitalWrite(A0,1);
+  digitalWrite(A1,0);
     delay(10);
   }
