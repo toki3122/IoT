@@ -11,7 +11,7 @@ void setup() {
   Serial.println("Scan done");
 
   if (n == 0) {
-    Serial.println("NO NETWORKS FOUND ❌");
+    Serial.println("NO NETWORKS FOUND");
   } else {
     for (int i = 0; i < n; i++) {
       Serial.print(WiFi.SSID(i));
